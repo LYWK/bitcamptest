@@ -3,7 +3,6 @@
 var app = (function(){//app 에서  init 를 알수 없다. 
     let init= function(){
       login_form();
-
     }
     let login_form = function(){
       var wrapper = document.querySelector('#wrapper');
@@ -14,45 +13,48 @@ var app = (function(){//app 에서  init 를 알수 없다.
       +'  Last name:<br>'
       +'  <input type="text" name="lastname" value="Mouse">'
       +'  <br><br>'
-      +'  <input type="submit" value="Submit">'
+      +'  <input id="login-btn" type = "button" value="Login">'
+      +'  <input id="join-btn"  type = "button" value="Join">'
       +'</form> ';
-      var btn = document.querySelector('#btn');  //객체 생성 
-      var target = document.getElementById("target");
-      btn.addEventListener('click',function(){
-          // wrapper.innerHTML = '<h1>spa  시작</h1> '+'<div>       </div>'+ '<button id = "btn">지워버리자</button>';
-       //   document.getElementById('delete').innerHTML = '';
-         target.innerHTML = '';
-      
-      });
+        let join_btn = document.querySelector('#join-btn');
+        join_btn.addEventListener('click',function(){
+              Join_form();
+        });
+        
+    //   var Join = document.querySelector('#Join');
+    //   wrapper.innerHTML = '<form>'
+    //   +'   ID:<br>'
+    //   +'  <input type="text" name="id">'
+    //   +'  <br>'
+    //   +'   Pass:<br>'
+    //   +'  <input type="text" name="pass">'
+    //   +'   Name:<br>'
+    //   +'  <input type="text" name="Name">'
+    //   +'   Ssn:<br>'
+    //   +'  <input type="text" name="Ssn">'
+    //   +'   Phone:<br>'
+    //   +'  <input type="text" name="Phone">'
+    //   +'</form>';
+     }
 
-      
-      var btn2 = document.querySelector('#btn2');
-      
-      btn2.addEventListener('click',function(){
-           var temp = document.createTextNode('새추가');
-            target.appendChild(temp);
-      });
-
-      var Join = document.querySelector('#Join');
-      Join.innerHTML = '<form>'
-      +'   ID:<br>'
-      +'  <input type="text" name="id">'
-      +'  <br>'
-      +'   Pass:<br>'
-      +'  <input type="text" name="pass">'
-      +'   Name:<br>'
-      +'  <input type="text" name="Name">'
-      +'   Ssn:<br>'
-      +'  <input type="text" name="Ssn">'
-      +'   Phone:<br>'
-      +'  <input type="text" name="Phone">'
-      +'</form>';
-    }
-
-    let Join_form = function(){
-
-    }
+     let Join_form = function(){
+            let wrapper = document.querySelector('#wrapper');
+            wrapper.innerHTML = '<form>'
+               +'   ID:<br>'
+               +'  <input type="text" name="id">'
+               +'  <br>'
+               +'   Pass:<br>'
+               +'  <input type="text" name="pass">'
+               +'   Name:<br>'
+               +'  <input type="text" name="Name">'
+               +'   Ssn:<br>'
+              +'  <input type="text" name="Ssn">'
+               +'   Phone:<br>'
+               +'  <input type="text" name="Phone">'
+               +'</form>';
+       }
     return {init : init};// closure  -app에 init로 property 등록 
 })();
+
 
    
