@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.bitcamp.web.mapper.OrderMapper">
+    <resultMap id = "orderMap" type="com.bitcamp.web.domain.OrderDTO">
+            <id property = "employeeId" column = "ORDER_ID"/>
+            <result property="manager" column="CUSTOMER_ID"/>
+            <result property="name" column="EMPLOYEE_ID"/>
+            <result property="birthDate" column="ORDER_DATE"/>
+            <result property="photo" column="SHIPPER_ID"/>
+    </resultMap>
+    
+    
+    <insert id="insertOders" parameterType="com.bitcamp.web.domain.OrderDTO">
+        insert into ODERS (ORDER_ID,CUSTOMER_ID, EMPLOYEE_ID, ORDER_DATE, SHIPPER_ID)
+        values (#{orderId},#{customerId},#{employeeId},#{orderDate},#{shipperId})
+    </insert>
+    <select id="selectOders" resultMap="orderMap">
+        select * from ODERS
+    </select>
+    <select id="selectOdersByOption" resultMap="orderMap" 
+                                            parameterType="com.bitcamp.web.domain.OrderDTO">
+        select * from ODERS where CUSTOMER_ID = #{customerId}
+    </select>
+   <select id="selectOdersById" resultMap="orderMap"
+                                            parameterType="string">
+        select * from ODERS where ORDER_ID = #{orderId}
+    </select>
+    <update id="updateOders" parameterType="com.bitcamp.web.domain.OrderDTO">
+        update ODERS set
+            CUSTOMER_ID = #{customerId},
+            EMPLOYEE_ID = #{employeeId},
+            ORDER_DATE = #{orderDate},
+            SHIPPER_ID =#{shipperId},
+        where ORDER_ID = #{orderId}
+    </update>
+
+    <delete id="deleteOders" parameterType="com.bitcamp.web.domain.OrderDTO">
+        delete from ODERS where ORDER_ID = #{orderId}
+    </delete>
+</mapper>
+  

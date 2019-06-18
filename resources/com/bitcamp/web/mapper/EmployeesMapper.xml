@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.bitcamp.web.mapper.EmployeesMapper">
+    <resultMap id = "employeesMap" type="com.bitcamp.web.domain.EmployeesDTO">
+            <id property = "employeeId" column = "EMPLOYEE_ID"/>
+            <result property="manager" column="MANAGER"/>
+            <result property="name" column="NAME"/>
+            <result property="birthDate" column="BIRTH_DATE"/>
+            <result property="photo" column="PHOTO"/>
+            <result property="notes" column="NOTES"/>
+    </resultMap>
+
+   
+   
+   
+    <insert id="insertEmployees" parameterType="com.bitcamp.web.domain.EmployeesDTO">
+        insert into EMPLOYEES (EMPLOYEE_ID,MANAGER, NAME, BIRTH_DATE, PHOTO, NOTES)
+        values (#{employeesId},#{manager},#{name},#{birthDate},#{photo},#{notes})
+    </insert>
+    <select id="selectEmployees" resultMap="employeesMap">
+        select * from EMPLOYEES
+    </select>
+    <select id="selectEmployeesByOption" resultMap="employeesMap" 
+                                            parameterType="com.bitcamp.web.domain.EmployeesDTO">
+        select * from EMPLOYEES where NAME = #{name}
+    </select>
+   <select id="selectEmployeesByEmployeesId" resultMap="employeesMap"
+                                            parameterType="string">
+        select * from EMPLOYEES where NAME = #{value}
+    </select>
+    <update id="updateEmployees" parameterType="com.bitcamp.web.domain.EmployeesDTO">
+        update EMPLOYEES set
+            MANAGER = #{manager},
+            NAME = #{name},
+            BIRTH_DATE = #{birthDate},
+            PHOTO =#{photo},
+            NOTES = #{notes},
+        where EMPLOYEE_ID = #{employeesId}
+    </update>
+
+    <delete id="deleteEmployees" parameterType="com.bitcamp.web.domain.EmployeesDTO">
+        delete from EMPLOYEES where Employees_ID = #{EmployeeId}
+    </delete>
+</mapper>
+  

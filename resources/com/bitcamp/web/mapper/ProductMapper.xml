@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.bitcamp.web.mapper.ProductMapper">
+    <resultMap id = "productMap" type="com.bitcamp.web.domain.ProductDTO">
+            <id property = "productId" column = "PRODUCT_ID"/>
+            <result property="productName" column="PRODUCT_NAME"/>
+            <result property="supplierId" column="SUPPLIER_ID"/>
+            <result property="categoryId" column="CATEGORY_ID"/>
+            <result property="unit" column="UNIT"/>
+            <result property="price" column="PRICE"/>
+            <result property="photo" column="PHOTO"/>
+    </resultMap>
+    <insert id="insertProducts" parameterType="com.bitcamp.web.domain.ProductDTO">
+        insert into PRODUCTS (PRODUCT_ID,PRODUCT_NAME, SUPPLIER_ID, CATEGORY_ID, UNIT, PRICE, PHOTO)
+        values (#{productId},#{productName},#{supplierId},#{categoryId},#{unit},#{price},#{photo})
+    </insert>
+    <select id="selectProducts" resultMap="productMap">
+        select * from PRODUCTS
+    </select>
+    <select id="selectProductsByOption" resultMap="productMap" 
+                                            parameterType="com.bitcamp.web.domain.ProductDTO">
+        select * from PRODUCTS where CUSTOMER_ID = #{customerId}
+    </select>
+   <select id="selectProductsById" resultMap="productMap"
+                                            parameterType="string">
+        select * from PRODUCTS where ORDER_ID = #{orderId}
+    </select>
+    <update id="updateProducts" parameterType="com.bitcamp.web.domain.ProductDTO">
+        update PRODUCTS set
+            PRODUCT_NAME = #{productName},
+            SUPPLIER_ID = #{supplierId},
+            CATEGORY_ID = #{categoryId},
+            UNIT =#{unit},
+            PRICE =#{price},
+            PHOTO =#{photo}
+        where PRODUCT_ID = #{productId}
+    </update>
+
+    <delete id="deleteProducts" parameterType="com.bitcamp.web.domain.ProductDTO">
+        delete from Products where PRODUCT_ID = #{productId}
+    </delete>
+</mapper>
+  

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.bitcamp.web.mapper.SupplierMapper">
+    
+    <resultMap id = "supplierMap" type="com.bitcamp.web.domain.SupplierDTO">
+            <id property = "supplierId" column = "SUPPLIER_ID"/>
+            <result property="supplierName" column="SUPPLIER_NAME"/>
+            <result property="contactName" column="CONTACT_NAME"/>
+            <result property="address" column="ADDRESS"/>
+            <result property="city" column="CITY"/>
+            <result property="postalCode" column="POSTAL_CODE"/>
+            <result property="country" column="COUNTRY"/>
+            <result property="phone" column="PHONE"/>
+    </resultMap>
+
+    <insert id="insertSuppliers" parameterType="com.bitcamp.web.domain.SupplierDTO">
+        insert into SUPPLIERS (SUPPLIER_ID,SUPPLIER_NAME, CONTACT_NAME, ADDRESS, CITY, POSTAL_CODE, COUNTRY, PHONE)
+        values (#{supplierId},#{supplierName},#{contactName},#{address},#{city},#{postalCode},#{country},#{phone})
+    </insert>
+    <select id="selectSuppliers" resultMap="supplierMap">
+        select * from SUPPLIERS
+    </select>
+    <select id="selectSuppliersByOption" resultMap="supplierMap" 
+                                            parameterType="com.bitcamp.web.domain.SupplierDTO">
+        select * from SUPPLIERS where contactName = #{contactName}
+    </select>
+   <select id="selectSuppliersById" resultMap="supplierMap"
+                                            parameterType="string">
+        select * from SUPPLIERS where SUPPLIER_ID = #{supplierId}
+    </select>
+    <update id="updateSuppliers" parameterType="com.bitcamp.web.domain.SupplierDTO">
+        update SUPPLIERS set
+            SUPPLIER_NAME = #{supplierName},
+            CONTACT_NAME = #{contactName},
+            ADDRESS = #{address},
+            CITY = #{city},
+            POSTAL_CODE = #{postalCode},
+            COUNTRY = #{country},
+            PHONE = #{phone}
+        where SUPPLIER_ID = #{supplierId}
+    </update>
+
+    <delete id="deleteSuppliers" parameterType="com.bitcamp.web.domain.SupplierDTO">
+        delete from SUPPLIERS where SUPPLIER_ID = #{supplierId}
+    </delete>
+</mapper>
+  

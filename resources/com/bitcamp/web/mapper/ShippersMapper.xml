@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.bitcamp.web.mapper.ShippersMapper">
+
+    <resultMap id = "shippersMap" type="com.bitcamp.web.domain.ShippersDTO">
+            <id property = "shipperId" column = "SHIPPER_ID"/>
+            <result property="shipperName" column="SHIPPER_NAME"/>
+            <result property="phone" column="PHONE"/>
+    </resultMap>
+
+    <insert id="insertShippers" parameterType="com.bitcamp.web.domain.ShippersDTO">
+        insert into SHIPPERS (SHIPPER_ID,SHIPPER_NAME, PHONE)
+        values (#{shipperId},#{shipperName},#{phone})
+    </insert>
+    <select id="selectShippers" resultMap="shippersMap">
+        select * from SHIPPERS
+    </select>
+    <select id="selectShippersByOption" resultMap="shippersMap" 
+                                            parameterType="com.bitcamp.web.domain.ShippersDTO">
+        select * from SHIPPERS where SHIPPER_NAME = #{shipperName}
+    </select>
+   <select id="selectShippersById" resultMap="shippersMap"
+                                            parameterType="string">
+        select * from SHIPPERS where SHIPPER_ID = #{shipperId}
+    </select>
+    <update id="updateShippers" parameterType="com.bitcamp.web.domain.ShippersDTO">
+        update SHIPPERS set
+            SHIPPER_NAME = #{shipperName},
+            PHONE = #{phone}
+        where SHIPPER_ID = #{shipperId}
+    </update>
+
+    <delete id="deleteShippers" parameterType="com.bitcamp.web.domain.ShippersDTO">
+        delete from SHIPPERS where SHIPPER_ID = #{shipperId}
+    </delete>
+</mapper>
+  

@@ -1,60 +1,137 @@
-
-
-var app = (function(){//app 에서  init 를 알수 없다. 
-    let init= function(){
-      login_form();
-    }
-    let login_form = function(){
-      var wrapper = document.querySelector('#wrapper');
-      wrapper.innerHTML = '<form action="/action_page.php">'
-      +'  First name:<br>'
-      +'  <input type="text" name="firstname" value="Mickey">'
-      +'  <br>'
-      +'  Last name:<br>'
-      +'  <input type="text" name="lastname" value="Mouse">'
-      +'  <br><br>'
-      +'  <input id="login-btn" type = "button" value="Login">'
-      +'  <input id="join-btn"  type = "button" value="Join">'
-      +'</form> ';
+var app =  {
+    $wrapper :  $wrapper = document.querySelector('#wrapper'),
+    init : init
+};
+     var customers ={
+        mypage : mypage,
+        login_form : login_form,
+        join_form : join_form,
+        join : join,
+        count : count
+     };
+    function  init() {
+        $wrapper.innerHTML = customers.login_form();
+        let login_btn = document.querySelector('#login-btn');
+        login_btn.addEventListener('click',e=>{
+            e.preventDefault();
+            alert('로그인 버튼 클릭');
+            id = document.getElementById('customerId').value;
+            pass = document.getElementById('password').value;
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'customers/'+id+'/'+pass, true);
+            xhr.onload=()=>{
+                if(xhr.readyState=== 4 && xhr.status === 200){
+                    if(xhr.responseText){
+                        $wrapper.innerHTML = customers.mypage();
+                    }else{
+                        $wrapper.innerHTML = customers.login_form();
+                    }
+                    
+                }
+            };
+            xhr.send();
+        }); 
         let join_btn = document.querySelector('#join-btn');
-        join_btn.addEventListener('click',function(){
-              Join_form();
+        join_btn.addEventListener('click',()=>{
+            $wrapper.innerHTML = customers.join_form();
+            document.getElementById('confirm-btn')
+            .addEventListener('click', e=>{
+                e.preventDefault();
+                alert('조인버튼 클릭');
+                customers.join();
+            });
         });
-        
-    //   var Join = document.querySelector('#Join');
-    //   wrapper.innerHTML = '<form>'
-    //   +'   ID:<br>'
-    //   +'  <input type="text" name="id">'
-    //   +'  <br>'
-    //   +'   Pass:<br>'
-    //   +'  <input type="text" name="pass">'
-    //   +'   Name:<br>'
-    //   +'  <input type="text" name="Name">'
-    //   +'   Ssn:<br>'
-    //   +'  <input type="text" name="Ssn">'
-    //   +'   Phone:<br>'
-    //   +'  <input type="text" name="Phone">'
-    //   +'</form>';
-     }
+    };
+    function join(){
+        let xhr = new XMLHttpRequest();
+        let data = {
+                    customerId : document.getElementById('customerId').value,
+                    customerName : document.getElementById('customerName').value,
+                    password : document.getElementById('password').value,
+                    ssn : document.getElementById('ssn').value,
+                    phone : document.getElementById('phone').value,
+                    city : document.getElementById('city').value,
+                    address : document.getElementById('address').value,
+                    postalcode : document.getElementById('postalcode').value
 
-     let Join_form = function(){
-            let wrapper = document.querySelector('#wrapper');
-            wrapper.innerHTML = '<form>'
-               +'   ID:<br>'
-               +'  <input type="text" name="id">'
-               +'  <br>'
-               +'   Pass:<br>'
-               +'  <input type="text" name="pass">'
-               +'   Name:<br>'
-               +'  <input type="text" name="Name">'
-               +'   Ssn:<br>'
-              +'  <input type="text" name="Ssn">'
-               +'   Phone:<br>'
-               +'  <input type="text" name="Phone">'
-               +'</form>';
-       }
-    return {init : init};// closure  -app에 init로 property 등록 
-})();
+        };
+        xhr.open('POST','customers',true);
+        xhr.setRequestHeader('Content-type','application/json; charset= utf-8')
+        xhr.onload=()=>{
+            if (xhr.readyState==4 & xhr.status == 200) {
+                let d = JSON.parse(xhr.responseText);
+                if (d.result === 'SUCCESS') {
+                    alert(''+d.result);
+                    app.init();
+                } else {
+                    alert(' join fail');
+                }
+                alert('join success'+d.result);//login form 
+            }else {
+                alert(' ajax fail');
+            }
+        };
+        xhr.send(JSON.stringify(data));
+    };
+    function count(){
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'count', true);
+        xhr.onload=()=>{
+            if(xhr.readyState===4 && xhr.status === 200){
+                alert('성공');
+                let wrapper = document.querySelector('#wrapper');
+                wrapper.innerHTML = '총 고객수 : <h1>'+xhr.responseText+'</h1>'
+            }
+        }
+        xhr.send();
+    };
 
 
-   
+
+function mypage(){
+return '<h1>마이페이지</h1> ';
+};
+
+function login_form(){
+return '<form action="/action_page.php">'
++'  First name:<br>'
++'  <input type="text" id="customerId" name="customerId">'
++'  <br>'
++'  Last name:<br>'
++'  <input type="text" id="password" name="password">'
++'  <br><br>'
++'  <input id="login-btn" type="button" value="LOGIN">'
++'  <input id="join-btn" type="button" value="JOIN">'
++'</form> ';
+};
+
+
+function join_form(){
+ 
+return '<form>'
++'  아이디<br>'
++'	<input type="text" id="customerId" name="customerId"><br>'
++'	비밀번호<br>'
++'	<input type="password" id = "password" name="password"><br>'
++'	이름<br>'
++'	<input type="text"id = "customerName" name="customerName"><br>'
++'	<br><br>'
++'	주민번호<br>'
++'	<input type="text"id = "ssn" name="ssn"><br>'
++'	<br><br>'
++'	전화번호<br>'
++'	<input type="text"id = "phone" name="phone"><br>'
++'	<br><br>'
++'	도시<br>'
++'	<input type="text"id = "city" name="city"><br>'
++'	<br><br>'
++'	주소<br>'
++'	<input type="text"id = "address" name="address"><br>'
++'	<br><br>'
++'	우편번호<br>'
++'	<input type="text"id = "postalcode" name="postalcode"><br>'
++'	<br><br>'
++'	<input id="confirm-btn" type="submit" value="확인">'
++'	<input id="cancel-btn" type="reset" value="취소">'
++'</form>';
+}
