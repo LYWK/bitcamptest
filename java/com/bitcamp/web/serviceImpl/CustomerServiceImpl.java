@@ -26,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerDTO> findCustomer() {
-        return null;
+        return customerMapper.selectCustomers();
     }
 
     @Override
@@ -35,18 +35,24 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO findCustomerById(CustomerDTO customer) {
-        return null;
+    public CustomerDTO findCustomerById(String customerId) {
+        return customerMapper.selectCustomerByCustomerId(customerId);
     }
 
     @Override
-    public void updateCustomer(CustomerDTO customer) {
-
+    public int updateCustomer(CustomerDTO customer) {
+            int res = customerMapper.updateCustomer(customer);
+             if (res == 1) {
+                 System.out.println("서비스 수정 성공");
+             } else {
+                 System.out.println("서비스 수정 실패");
+             }
+            return res;
     }
 
     @Override
     public void deleteCustomer(CustomerDTO customer) {
-
+            customerMapper.deleteCustomer(customer);
     }
 
     @Override

@@ -29,7 +29,7 @@
     </select>
     <select id="selectCustomersByOption" resultMap="customerMap" 
                                             parameterType="com.bitcamp.web.domain.CustomerDTO">
-        select * from CUSTOMERS where CUSTOMER_NAME = #{CUSTOMERName}
+        select * from CUSTOMERS where CUSTOMER_NAME = #{customerName}
     </select>
    <select id="selectCustomerByCustomerId" resultMap="customerMap"
                                             parameterType="string">
@@ -42,13 +42,18 @@
     </select>
     <update id="updateCustomer" parameterType="com.bitcamp.web.domain.CustomerDTO">
         update CUSTOMERS set
-            CUSTOMER_NAME = #{CUSTOMERName},
-            DESCRIPTION = #{description}
-        where CUSTOMER_ID = #{CUSTOMERId}
+            CUSTOMER_NAME = #{customerName},
+            PASSWORD = #{password},
+            SSN = #{ssn},
+            PHONE = #{phone},
+            CITY = #{city},
+            ADDRESS = #{address},
+            POSTALCODE =   #{postalcode}
+        where CUSTOMER_ID = #{customerId}
     </update>
 
     <delete id="deleteCustomer" parameterType="com.bitcamp.web.domain.CustomerDTO">
-        delete from CUSTOMERS where CUSTOMER_ID = #{CUSTOMERId}
+        delete from CUSTOMERS where CUSTOMER_ID LIKE #{customerId}
     </delete>
 
     <select id = "selectCount" resultType ="int">

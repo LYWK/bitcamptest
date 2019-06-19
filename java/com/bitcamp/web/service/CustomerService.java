@@ -18,9 +18,9 @@ public interface CustomerService {
 
     public List<CustomerDTO> findCustomerByWord(CustomerDTO customer);
 
-    public CustomerDTO findCustomerById(CustomerDTO customer);
+    public CustomerDTO findCustomerById(String customerId);
 
-    public void updateCustomer(CustomerDTO customer);
+    public int updateCustomer(CustomerDTO customer);
 
     public void deleteCustomer(CustomerDTO customer);
 
