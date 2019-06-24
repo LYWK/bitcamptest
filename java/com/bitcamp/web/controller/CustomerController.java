@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.bitcamp.web.common.util.PageProxy;
+import com.bitcamp.web.common.util.Printer;
 import com.bitcamp.web.domain.CustomerDTO;
 import com.bitcamp.web.mapper.CustomerMapper;
 import com.bitcamp.web.service.CustomerService;
@@ -28,11 +30,17 @@ public class CustomerController {
     
     @Autowired CustomerDTO customer;
 
+    @Autowired Printer p;
+    @Autowired PageProxy pxy;
+
+    
+
     @RequestMapping("/count")
     public String index() {
         System.out.println("customer url 경로로 들어옴 ");
         int count = customerService.countAll();
-        System.out.println("고객의 총인원"+ count);
+        p.accept("람다가 출력하 고객"+count);
+        //System.out.println("고객의 총인원"+ count);
         return count + "";
         
     }
@@ -70,22 +78,33 @@ public class CustomerController {
         return map;
     }
 
-    @GetMapping("")
-    public List<CustomerDTO> list() {
-        List<CustomerDTO> list = new ArrayList<>();
-        list = customerService.findCustomer(); 
-                 for (CustomerDTO customer : list) { 
-                     System.out.println(customer.getCustomerId()+" : " 
-                                     +customer.getCustomerName()+" : " 
-                                     +customer.getPassword()+" : " 
-                                     +customer.getSsn()+" : " 
-                                     +customer.getPhone()+" : " 
-                                     +customer.getCity()+" : " 
-                                     +customer.getAddress()+" : " 
-                                     +customer.getPostalcode()); 
-                 } 
+    @GetMapping("/page/{pageNum}")
+    public HashMap<String, Object> list(@PathVariable String pageNum) {
+        //List<CustomerDTO> list = new ArrayList<>();
         
-        return list;
+        //rowCount , page_num, page_size, block_size 
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("totalCount", customerService.countAll());
+        map.put("page_num", pageNum);
+        map.put("page_size", "5");
+        map.put("block_size", "5");
+        pxy.execute(map);
+        
+        map.put("list", customerService.findCustomer(pxy));
+        map.put("pxy", pxy);
+        // list = customerService.findCustomer(customer);
+        //          for (CustomerDTO customer : list) { 
+        //              System.out.println(customer.getCustomerId()+" : " 
+        //                              +customer.getCustomerName()+" : " 
+        //                              +customer.getPassword()+" : " 
+        //                              +customer.getSsn()+" : " 
+        //                              +customer.getPhone()+" : " 
+        //                              +customer.getCity()+" : " 
+        //                              +customer.getAddress()+" : " 
+        //                              +customer.getPostalcode()); 
+        //          } 
+        
+        return map;
     }
 
 

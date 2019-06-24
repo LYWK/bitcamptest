@@ -17,14 +17,32 @@ var app =  {
      var employee = {
          login : login,
          customers_list : customers_list,
-         admin_login : admin_login
+         admin_login : admin_login,
+         customer_list_form : customer_list_form
      };
 
      var session = {
           set_value : set_value,
           get_value : get_value
      };
+//customerId,
+// customerName,
+// ssn ,
+// phone,
+// city,
 
+     function customer_list_form() {
+         return '<h2>고객 목록</h2>'
+         +'<table id="customer-table">'
+         +'  <tr>'
+         +'    <th>아이디</th>'
+         +'    <th>고객명</th>'
+         +'    <th>주민번호</th>'
+         +'    <th>전화번호</th>'
+         +'    <th>도시</th>'
+         +'  </tr><tbody id="tbody"></tbody>'
+         +'</table>'
+     }
      function set_value(x) {
          sessionStorage.setItem(x.name,x.value);
      }
@@ -48,7 +66,6 @@ var app =  {
         .addEventListener('click',e=>{
             e.preventDefault();
             alert('admin 클릭');
-            
             employee.admin_login();
         });
         ///let join_btn = document.querySelector('#join-btn');
@@ -131,7 +148,7 @@ var app =  {
         if (isAdmin) {
             let pass = prompt("관리자 번호를 입력하세요");
             if (pass == 1000) {
-                employee.customers_list();
+                employee.customers_list('1');
             }else{
                 alert('입력한 번호가 일치하지 않습니다.');
             }
@@ -139,24 +156,103 @@ var app =  {
             alert('관리자만 접속이 가능합니다.');
         }
     }
-    function customers_list() {
+    function create_customer_row(x) {
+        return "<tr><td>"+x.customerId+"</td><td>"+x.customerName+"</td><td>"+x.ssn+"</td><td>"+x.phone+"</td><td>"+x.city+"</td></tr>";
+    }
+    
+    function customers_list(x) {
        
         let xhr = new XMLHttpRequest();
-        xhr.open('GET','customers',true);
+        //page_num, page_size, block_size 
+    
+        xhr.open('GET','customers/page/'+x,true);
         xhr.onload=()=>{
             if(xhr.readyState===4 && xhr.status === 200){
                let d = JSON.parse(xhr.responseText);
-                     
+               //let list = d.list;
+               //let pxy = d.pxy;
+            let wrapper = document.querySelector('#wrapper');
+            wrapper.innerHTML = employee.customer_list_form();
+            let tbody = document.getElementById('tbody'); 
+            let i = 0;
             
-
-               }
+            d.list.forEach((v,i)=> {
+                let row  = create_customer_row(v);
+                tbody.innerHTML += row;
+            });
              
-               
+             let blocks = document.createElement('div');
+             blocks.setAttribute('id','blocks');
+             wrapper.appendChild(blocks);
+             let spans = document.createElement('div');
+             i = 1;
+
+             for ( ; i < 6; i++) {
+                 let span = document.createElement('span');
+                 span.setAttribute('style','display:inline-block;padding-right:20px;' +'border: 1px solid black;');
+                 span.setAttribute('class','page-num');
+                 span.innerHTML = i;
+                    if (x == span.innerHTML) {
+                        span.style.backgroundColor = "red";
+                    }
+                    spans.appendChild(span);
+                }
+
+                //  span.addEventListener('click', e => {
+                //     e.preventDefault();
+                //     employee.customers_list(i);//재귀호출
+                // });
+                blocks.appendChild(spans);
+                let clss = document.getElementsByClassName('page-num');
+                // i = 0;
+                // var spanList = blocks.children;
+                // for (var j =0; j < spanList.length; j++){
+                // (function(j) {
+                // spanList[j].addEventListener('click',function(e){
+                // customers_list(this.innerText)
+                //  })
+                // })(i)
+                // }
+                //spans.appendChild(span);
+                //Array.prototype.forEach.call(clss, x=> {employee.customers_list(x.innerText)});
+                                    i = 0; 
+                                    for(;i<clss.length;i++){ 
+                                        (function(i){ 
+                                            clss[i].addEventListener('click',function(){ 
+                                                customers_list(this.innerText) 
+                                            }) 
+                                        })(i) 
+                                    }
+
+
+                                       /**
+            최동훈의 로직
+            
+            for(let i = 1; i < 6; i++){
+            inputs += '<input type="button" value="' + i + '" onclick="customer_list(this.value)"/>';
+            }
+            */
+                                    if(d.pxy.existPrev){ 
+                                        let prevBlock = document.createElement('span'); 
+                                        prevBlock.setAttribute('style','display:inline-block;padding-right:20px;border: 1px solid black;'); 
+                                        prevBlock.textContent="<"; 
+                                        blocks.prepend(prevBlock); 
+                                    } 
+                             
+                                    if(d.pxy.existNext){ 
+                                        let nextBlock = document.createElement('span'); 
+                                        nextBlock.setAttribute('style','display:inline-block;padding-right:20px;border: 1px solid black;'); 
+                                        nextBlock.textContent=">"; 
+                                        blocks.appendChild(nextBlock); 
+                                    } 
+                                        
+             
+                }
             };
             xhr.send();
         }
-       
-    
+
+ 
     function count(){
         var xhr = new XMLHttpRequest();
         xhr.open('GET', 'count', true);

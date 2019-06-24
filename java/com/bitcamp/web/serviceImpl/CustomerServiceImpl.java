@@ -2,6 +2,7 @@ package com.bitcamp.web.serviceImpl;
 
 import java.util.List;
 
+import com.bitcamp.web.common.util.PageProxy;
 import com.bitcamp.web.domain.CustomerDTO;
 import com.bitcamp.web.mapper.CustomerMapper;
 import com.bitcamp.web.service.CustomerService;
@@ -25,8 +26,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerDTO> findCustomer() {
-        return customerMapper.selectCustomers();
+    public List<CustomerDTO> findCustomer(PageProxy pxy) {
+        return customerMapper.selectCustomers(pxy);
     }
 
     @Override

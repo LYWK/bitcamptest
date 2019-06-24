@@ -3,6 +3,7 @@ package com.bitcamp.web.service;
 import java.util.HashMap;
 import java.util.List;
 
+import com.bitcamp.web.common.util.PageProxy;
 import com.bitcamp.web.domain.CustomerDTO;
 
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 public interface CustomerService {
     public void addCustomer(CustomerDTO customer);
 
-    public List<CustomerDTO> findCustomer();
+    public List<CustomerDTO> findCustomer(PageProxy pxy);
 
     public List<CustomerDTO> findCustomerByWord(CustomerDTO customer);
 
